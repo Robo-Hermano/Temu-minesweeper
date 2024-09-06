@@ -1,0 +1,16 @@
+html {
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  /* no aligning items as it is more ugly but also makes coords work easier */
+}
+
+body {
+  margin: 0;
+}
+
+canvas {
+  margin: 0;
+  /* originally intended to use margins but strokeRect is just easier */
+}
