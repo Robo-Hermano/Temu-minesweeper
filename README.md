@@ -1,2 +1,2 @@
 # Temu-minesweeper
-Let's be honest, real sweats don't care about QoL, this allows them to sweat just like the original, which is what matters
+Ok now all QoL is present other than winning game (which kinda important) and 0 leading to nearby numbers being shown as well (which I can't be asked)
