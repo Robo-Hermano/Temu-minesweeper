@@ -1,18 +1,31 @@
+//I'll add comments later
 document.addEventListener("click", clicking);
-ctx = document.getElementById("canvas").getContext("2d"); //setting up canvas for drawing
-ctx.strokeStyle = 'black'; //for the borders to show
+document.addEventListener('contextmenu', clicking);
+ctx = document.getElementById("canvas").getContext("2d");
+ctx.strokeStyle = 'black';
+ctx.fillStyle = 'red';
 let mine_count = 10;
-let height = 9; let width = 9; //setting up the grid
-let mine_arr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0];
+let height = 9; let width = 9;
+let mine_arr = [];
+let mine_left_click = [];
+let mine_right_click = [];
+
+for (let i = 0; i < 81; i++){
+  mine_arr.push(0);
+  mine_left_click.push(false);
+  mine_right_click.push(false);
+}
+
 for (let i = 0; i < mine_count; i++) {
   mine = parseInt(Math.random() * (height * width));
   if (mine_arr[mine] != 1000) {
-    mine_arr[mine] = 1000; //random distribution of the mines
+    mine_arr[mine] = 1000;
   }
   else {
-    i--; //so that loop keeps going until all mines are allocated to a unique position
+    i--;
   }
 }
+
 for (let i = 0; i < (height*width); i++) {
   if (mine_arr[i] != 1000) {
     mine_arr[i] = countmines(mine_arr, i)
@@ -21,11 +34,11 @@ for (let i = 0; i < (height*width); i++) {
 
 for (let i = 1; i < 10; i++) {
   for (let j = 1; j < 10; j++) {
-    ctx.strokeRect(i*50, j*50, 50, 50); //used because fillRect doesn't make borders
+    ctx.strokeRect(i*50, j*50, 50, 50);
   }
 }
 
-function countmines (arr, position) { //basic calculations to figure out how many mines in adjacent squares
+function countmines (arr, position) {
   if (position == 0){
     return parseInt((arr[1] + arr[width] + arr[width+1])/1000);
   }
@@ -54,22 +67,44 @@ function countmines (arr, position) { //basic calculations to figure out how man
     return parseInt((arr[position-1] + arr[position+1] + arr[position + width] + arr[position+width-1] + arr[position + width + 1] + arr[position-width] + arr[position-width+1] + arr[position-width-1])/1000);
   }
 }
-
+ctx.font = "30px Arial";
+ctx.fillText("mine count: " + mine_count, 550, 200)
 function clicking (event) {
-  x = event.pageX;
-  y = event.pageY;
-  position = parseInt(y/50-1)*9+parseInt((x/50-1));
+  const x = event.pageX;
+  const y = event.pageY;
+  const position = parseInt(y/50-1)*9+parseInt((x/50-1));
+  if (event.button === 0 && mine_left_click[position] == false){
   if (mine_arr[position] == 1000) {
     gameover();
   }
-  else {
+  else if (x <= 500 && y <= 500){
     ctx.font = "20px Arial";
     ctx.fillText(mine_arr[position], Math.floor(x/50)*50+20, Math.floor(y/50)*50+30);
+    mine_right_click[position] = true;
+  } }
+  else if (event.button === 2 && mine_right_click[position] == false){
+    if (mine_left_click[position] == false) {
+      ctx.fillRect(Math.floor(x/50)*50, Math.floor(y/50)*50, 50, 50)
+      mine_left_click[position] = true;
+      mine_count--;
+      ctx.font = '30px Arial';
+      ctx.clearRect(500, 100, 300, 300);
+      ctx.fillText("mine count: " + mine_count, 550, 200);
+    }
+    else {
+      ctx.clearRect(Math.floor(x/50)*50, Math.floor(y/50)*50, 50, 50)
+      ctx.strokeRect(Math.floor(x/50)*50, Math.floor(y/50)*50, 50, 50)
+      mine_left_click[position] = false;
+      mine_count++;
+      ctx.font = '30px Arial';
+      ctx.clearRect(500, 100, 300, 300);
+      ctx.fillText("mine count: " + mine_count, 550, 200);
+    }
   }
 }
 
 function gameover() {
   ctx.font = '30px Arial';
-  ctx.fillText('Mine exploded', 500, 300);
+  ctx.fillText('mine exploded', 550, 300);
   stop();
 }
