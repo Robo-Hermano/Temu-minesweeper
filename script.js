@@ -1,15 +1,14 @@
-//I'll add comments later
 document.addEventListener("click", clicking);
 document.addEventListener('contextmenu', clicking);
 ctx = document.getElementById("canvas").getContext("2d");
 ctx.strokeStyle = 'black';
 ctx.fillStyle = 'red';
 let mine_count = 10;
-let height = 9; let width = 9;
+const height = 9; const width = 9;
 let mine_arr = [];
 let mine_left_click = [];
 let mine_right_click = [];
-
+let game_over = false;
 for (let i = 0; i < 81; i++){
   mine_arr.push(0);
   mine_left_click.push(false);
@@ -73,7 +72,7 @@ function clicking (event) {
   const x = event.pageX;
   const y = event.pageY;
   const position = parseInt(y/50-1)*9+parseInt((x/50-1));
-  if (event.button === 0 && mine_left_click[position] == false){
+  if (event.button === 0 && mine_left_click[position] == false && game_over == false ){
   if (mine_arr[position] == 1000) {
     gameover();
   }
@@ -82,7 +81,7 @@ function clicking (event) {
     ctx.fillText(mine_arr[position], Math.floor(x/50)*50+20, Math.floor(y/50)*50+30);
     mine_right_click[position] = true;
   } }
-  else if (event.button === 2 && mine_right_click[position] == false){
+  else if (event.button === 2 && mine_right_click[position] == false && game_over == false){
     if (mine_left_click[position] == false) {
       ctx.fillRect(Math.floor(x/50)*50, Math.floor(y/50)*50, 50, 50)
       mine_left_click[position] = true;
@@ -106,5 +105,6 @@ function clicking (event) {
 function gameover() {
   ctx.font = '30px Arial';
   ctx.fillText('mine exploded', 550, 300);
+  game_over = true;
   stop();
 }
