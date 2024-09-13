@@ -1,8 +1,8 @@
-document.addEventListener("click", clicking);
-document.addEventListener('contextmenu', clicking);
-ctx = document.getElementById("canvas").getContext("2d");
+document.addEventListener("click", clicking); //for left click
+document.addEventListener('contextmenu', clicking); //for right click
+ctx = document.getElementById("canvas").getContext("2d"); 
 ctx.strokeStyle = 'black';
-ctx.fillStyle = 'red';
+ctx.fillStyle = 'red'; //for marking squares which the players thinks contains a mine
 let mine_count = 10;
 const height = 9; const width = 9;
 let mine_arr = [];
@@ -66,6 +66,7 @@ function countmines (arr, position) {
     return parseInt((arr[position-1] + arr[position+1] + arr[position + width] + arr[position+width-1] + arr[position + width + 1] + arr[position-width] + arr[position-width+1] + arr[position-width-1])/1000);
   }
 }
+
 ctx.font = "30px Arial";
 ctx.fillText("mine count: " + mine_count, 550, 200)
 function clicking (event) {
